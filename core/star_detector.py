@@ -27,7 +27,6 @@ def detect_stars(image):
                 cv2.circle(marked_image, center, 3, (255, 0, 0), 1)
                 stars_count += 1
 
-    # חיפוש עיגולים קטנים בעזרת HoughCircles
     circles = cv2.HoughCircles(enhanced, cv2.HOUGH_GRADIENT, dp=1.2, minDist=5,
                                param1=50, param2=15, minRadius=1, maxRadius=5)
 
