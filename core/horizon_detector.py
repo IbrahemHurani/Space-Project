@@ -13,10 +13,8 @@ def detect_horizon(image):
     if not contours:
         return None, None
 
-    # מציאת הקונטור הגדול ביותר (בדר"כ קו הפרדה בין כדור הארץ לחלל)
     largest_contour = max(contours, key=cv2.contourArea)
 
-    # חילוץ נקודות x,y מהקונטור
     points = np.squeeze(largest_contour)
     if points.ndim != 2:
         return None, None
@@ -24,11 +22,9 @@ def detect_horizon(image):
     xs = points[:, 0]
     ys = points[:, 1]
 
-    # התאמת עקומה מדרגה 2 (פרבולה)
     coeffs = np.polyfit(xs, ys, 2)
     poly = np.poly1d(coeffs)
 
-    # יצירת עותק תמונה וציון קו האופק
     marked_image = image.copy()
     for x in range(0, image.shape[1], 2):
         y = int(poly(x))
