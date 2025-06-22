@@ -23,14 +23,9 @@ def detect_horizon(image):
             if x not in horizon_points or y < horizon_points[x]:
                 horizon_points[x] = y
 
-    coeffs = np.polyfit(xs, ys, 2)
-    poly = np.poly1d(coeffs)
+    marked = image.copy()
+    for x, y in horizon_points.items():
+        cv2.circle(marked, (x, y), 1, (0, 255, 0), -1)
 
-    marked_image = image.copy()
-    for x in range(0, image.shape[1], 2):
-        y = int(poly(x))
-        if 0 <= y < image.shape[0]:
-            cv2.circle(marked_image, (x, y), 1, (0, 255, 0), -1)
-
-    avg_y = int(np.mean(ys))
-    return avg_y, marked_image
+    avg_y = int(np.mean(list(horizon_points.values())))
+    return avg_y, marked
