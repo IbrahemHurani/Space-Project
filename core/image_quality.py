@@ -26,16 +26,12 @@ def assess_image_quality(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     height, width = gray.shape
     
-    # חדות - שונות לפלסיאן
     laplacian_var = cv2.Laplacian(gray, cv2.CV_64F).var()
     
-    # ניגודיות - RMS contrast
     rms_contrast = np.std(gray) / 255.0
     
-    # בהירות - ממוצע עוצמת פיקסלים
     brightness = np.mean(gray)
     
-    # רעש - ממוצע שונות מקומית
     noise_samples = []
     for y in range(0, height, 50):
         for x in range(0, width, 50):
@@ -44,11 +40,9 @@ def assess_image_quality(image):
                 noise_samples.append(np.var(patch))
     noise = np.mean(noise_samples) if noise_samples else 0
     
-    # מדד BRISQUE
     brisque_score = None
     if BRISQUE_AVAILABLE:
         try:
-            # המרה לפורמט PyTorch
             img_tensor = torch.tensor(image).permute(2,0,1).unsqueeze(0).float() / 255.0
             brisque_score = brisque(img_tensor, data_range=1.0).item()
         except Exception as e:
