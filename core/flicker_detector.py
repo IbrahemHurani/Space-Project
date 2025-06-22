@@ -14,7 +14,7 @@ def detect_flickering(prev_img, current_img, threshold=0.25, min_change=0.05):
     curr_y = curr_yuv[:,:,0].astype(np.float32)
     
     diff = np.abs(prev_y - curr_y)
-    normalized_diff = diff / np.maximum(prev_y, 1)  
+    normalized_diff = diff / np.maximum(prev_y, 1) 
     
     mean_diff = np.mean(normalized_diff)
     if mean_diff < min_change:

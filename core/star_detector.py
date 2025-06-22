@@ -42,4 +42,13 @@ def detect_stars(image):
                 cv2.rectangle(marked_image, top_left, bottom_right, (0, 255, 0), 2)
                 stars_count += 1
 
-    return stars_count, marked_image
+    circles = cv2.HoughCircles(enhanced, cv2.HOUGH_GRADIENT, dp=1.2, minDist=5,
+                               param1=50, param2=15, minRadius=1, maxRadius=5)
+
+    if circles is not None:
+        for circle in circles[0, :]:
+            center = (int(circle[0]), int(circle[1]))
+            cv2.circle(marked_image, center, 3, (255, 0, 0), 1)
+        stars_count += circles.shape[1]
+
+    return (stars_count >= 3), marked_image
